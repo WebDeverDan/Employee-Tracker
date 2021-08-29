@@ -4,6 +4,8 @@
   "description": "## Your Task",
   "main": "index.js",
   "dependencies": {
+    "chalk": "^4.1.2",
+    "console-table-printer": "^2.10.0",
     "console.table": "^0.10.0",
     "inquirer": "^8.1.2",
     "mysql2": "^2.3.0"
