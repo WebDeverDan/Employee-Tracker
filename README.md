@@ -49,10 +49,10 @@
   * If you have any questions regarding the application, please reach out to **Daniel Bradley** (the creator), at their GitHub profile located here: **https://github.com/WebDeverDan**, or via email at **danielbvideo@gmail.com**.
 
   ## Screenshots
-  ![Image 1 of application:]()
-  ![Image 2 of application:]()
-  ![Image 3 of application:]()
-  ![Image 3 of application:]()
+  ![Image 1 of application:](https://github.com/WebDeverDan/Employee-Tracker/blob/b47ea1bbb9d88724391cc47aeb6b29fb807159e3/Screenshots/Start.png)
+  ![Image 2 of application:](https://github.com/WebDeverDan/Employee-Tracker/blob/b47ea1bbb9d88724391cc47aeb6b29fb807159e3/Screenshots/All%20Roles.png)
+  ![Image 3 of application:](https://github.com/WebDeverDan/Employee-Tracker/blob/b47ea1bbb9d88724391cc47aeb6b29fb807159e3/Screenshots/All%20Employees.png)
+  ![Image 3 of application:](https://github.com/WebDeverDan/Employee-Tracker/blob/b47ea1bbb9d88724391cc47aeb6b29fb807159e3/Screenshots/All%20Departments.png)
 
 
 
