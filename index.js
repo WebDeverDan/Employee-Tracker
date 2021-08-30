@@ -219,33 +219,7 @@ function updateEmployeeRole() {
   });
 }
 
-// function viewEmpByDept() {
-//   db.query("SELECT * FROM employees"
-//     , function (err, departmentsData) {
-//       const departments = departmentsData.map((departments) => {
-//         return {
-//           name: departments.dept_name,
-//           // value: departments.id,
-//         };
-//       });
-//   inquirer
-//       .prompt([
-//         {
-//           name: "whichDepartmentEmployees",
-//           type: "list",
-//           message: "Which department would you like to view?",
-//           choices: departments,
-//         },
-//       ])
-// })
-// }
- 
-// `SELECT employees.id, employees.first_name, employees.last_name, title, dept_name, salary
-//     FROM employees LEFT JOIN roles ON employees.roles_id = roles.id
-//     LEFT JOIN departments ON roles.department_id = departments.id`
 // to delete employee
-
-
 function deleteEmployee() {
   db.query("SELECT * from employees", function (err, employeesData) {
     const employees = employeesData.map((employees) => {
