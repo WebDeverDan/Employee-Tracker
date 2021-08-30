@@ -1,84 +1,81 @@
 const inquirer = require("inquirer");
-const mysql = require("mysql2");
+// const mysql = require("mysql2");
 const { printTable } = require('console-table-printer');
 // const startInquirer = require("Employee-Tracker/index.js");
-const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "newpassword",
-    database: "employee_db",
-  });
+const db = require("../db/connection");
+const {promisify} = require('util');
+db.query = promisify(db.query);
 
-function startInquirer() {
-    return inquirer
-      .prompt([
-        {
-          name: "mainMenu",
-          type: "list",
-          message: "What would you like to do?",
-          choices: [
-            "View All Employees",
-            "Add Employee",
-            "Update Employee Role",
-            "Delete Employee",
-            "Add Role",
-            "View All Roles",
-            "Add Department",
-            "View All Departments",
-            "Exit",
-          ],
-        },
-      ])
+// function startInquirer() {
+//     return inquirer
+//       .prompt([
+//         {
+//           name: "mainMenu",
+//           type: "list",
+//           message: "What would you like to do?",
+//           choices: [
+//             "View All Employees",
+//             "Add Employee",
+//             "Update Employee Role",
+//             "Delete Employee",
+//             "Add Role",
+//             "View All Roles",
+//             "Add Department",
+//             "View All Departments",
+//             "Exit",
+//           ],
+//         },
+//       ])
   
-      .then(function (val) {
-        switch (val.mainMenu) {
-          case "View All Employees":
-            viewAllEmployees();
-            break;
-          case "Add Employee":
-            addEmployee();
-            break;
-          case "Update Employee Role":
-            updateEmployeeRole();
-            break;
-          case "Delete Employee":
-            deleteEmployee();
-            break;
-          case "Add Role":
-            addRole();
-            break;
-          case "View All Roles":
-            viewRoles();
-            break;
-          case "Add Department":
-            addDepartment();
-            break;
-          case "View All Departments":
-            viewAllDepartments();
-            break;
-          case "Exit":
-            console.log("Good Bye");
-        }
-      });
-  }
+//       .then(function (val) {
+//         switch (val.mainMenu) {
+//           case "View All Employees":
+//             viewAllEmployees();
+//             break;
+//           case "Add Employee":
+//             addEmployee();
+//             break;
+//           case "Update Employee Role":
+//             updateEmployeeRole();
+//             break;
+//           case "Delete Employee":
+//             deleteEmployee();
+//             break;
+//           case "Add Role":
+//             addRole();
+//             break;
+//           case "View All Roles":
+//             viewRoles();
+//             break;
+//           case "Add Department":
+//             addDepartment();
+//             break;
+//           case "View All Departments":
+//             viewAllDepartments();
+//             break;
+//           case "Exit":
+//             console.log("Good Bye");
+//         }
+//       });
+//   }
 
-module.exports = function viewAllEmployees() {
-  db.query(
+function viewAllEmployees() {
+  return db.query(
     // for joins, we need the backticks
     `SELECT employees.id, employees.first_name, employees.last_name, title, salary, dept_name, CONCAT(manager.first_name, " ", manager.last_name) manager 
     FROM employees LEFT JOIN roles ON employees.roles_id = roles.id
     LEFT JOIN departments ON roles.department_id = departments.id
     LEFT JOIN employees manager ON employees.manager_id = manager.id`,
-    function (err, results) {
-      if (err) throw err;
-      printTable(results);
-      startInquirer();
-    }
+    // function (err, results) {
+    //   if (err) throw err;
+    //   printTable(results);
+    //   startInquirer();
+    // }
   );
 }
 
 // to add new employee
-module.exports = function addEmployee() {
+function addEmployee() {
   // this is to select all roles to make them available
   // for this type of query, we do not need the backticks, just ""
   db.query("SELECT * FROM roles", function (err, rolesData) {
@@ -147,7 +144,7 @@ module.exports = function addEmployee() {
 }
 
 // to update employee role
-module.exports = function updateEmployeeRole() {
+function updateEmployeeRole() {
   db.query("SELECT * FROM employees", function (err, employeesData) {
     const employees = employeesData.map((employees) => {
       return {
@@ -193,8 +190,8 @@ module.exports = function updateEmployeeRole() {
 }
 
 // to delete employee
-module.exports = function deleteEmployee() {
-  db.query("SELECT * from employees", function (err, employeesData) {
+function deleteEmployee() {
+  db.query("SELECT * from employees").then(employeesData=>{
     const employees = employeesData.map((employees) => {
       return {
         name: employees.first_name + " " + employees.last_name,
@@ -224,7 +221,7 @@ module.exports = function deleteEmployee() {
 }
 
 // to add role
-module.exports = function addRole() {
+ function addRole() {
   db.query("SELECT * FROM departments", function (err, departmentsData) {
     const departments = departmentsData.map((department) => {
       return {
@@ -271,7 +268,7 @@ module.exports = function addRole() {
 }
 
 // view all roles
-module.exports = function viewRoles() {
+ function viewRoles() {
   db.query(
     `SELECT roles.id, roles.title, salary, dept_name
     FROM roles LEFT JOIN departments ON roles.department_id = departments.id;`,
@@ -284,7 +281,7 @@ module.exports = function viewRoles() {
 }
 
 // to add department
-module.exports = function addDepartment() {
+ function addDepartment() {
   inquirer
     .prompt([
       {
@@ -307,7 +304,7 @@ module.exports = function addDepartment() {
 }
 
 // to view all departments
-module.exports = function viewAllDepartments() {
+ function viewAllDepartments() {
   db.query("SELECT * FROM departments", function (err, response) {
     if (err) throw err;
     printTable(response);
@@ -315,3 +312,6 @@ module.exports = function viewAllDepartments() {
   });
 }
 
+module.exports = {
+  viewAllEmployees, addEmployee
+}
