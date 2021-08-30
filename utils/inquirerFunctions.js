@@ -1,4 +1,68 @@
-function viewAllEmployees() {
+const inquirer = require("inquirer");
+const mysql = require("mysql2");
+const { printTable } = require('console-table-printer');
+// const startInquirer = require("Employee-Tracker/index.js");
+const db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "newpassword",
+    database: "employee_db",
+  });
+
+function startInquirer() {
+    return inquirer
+      .prompt([
+        {
+          name: "mainMenu",
+          type: "list",
+          message: "What would you like to do?",
+          choices: [
+            "View All Employees",
+            "Add Employee",
+            "Update Employee Role",
+            "Delete Employee",
+            "Add Role",
+            "View All Roles",
+            "Add Department",
+            "View All Departments",
+            "Exit",
+          ],
+        },
+      ])
+  
+      .then(function (val) {
+        switch (val.mainMenu) {
+          case "View All Employees":
+            viewAllEmployees();
+            break;
+          case "Add Employee":
+            addEmployee();
+            break;
+          case "Update Employee Role":
+            updateEmployeeRole();
+            break;
+          case "Delete Employee":
+            deleteEmployee();
+            break;
+          case "Add Role":
+            addRole();
+            break;
+          case "View All Roles":
+            viewRoles();
+            break;
+          case "Add Department":
+            addDepartment();
+            break;
+          case "View All Departments":
+            viewAllDepartments();
+            break;
+          case "Exit":
+            console.log("Good Bye");
+        }
+      });
+  }
+
+module.exports = function viewAllEmployees() {
   db.query(
     // for joins, we need the backticks
     `SELECT employees.id, employees.first_name, employees.last_name, title, salary, dept_name, CONCAT(manager.first_name, " ", manager.last_name) manager 
@@ -14,7 +78,7 @@ function viewAllEmployees() {
 }
 
 // to add new employee
-function addEmployee() {
+module.exports = function addEmployee() {
   // this is to select all roles to make them available
   // for this type of query, we do not need the backticks, just ""
   db.query("SELECT * FROM roles", function (err, rolesData) {
@@ -83,7 +147,7 @@ function addEmployee() {
 }
 
 // to update employee role
-function updateEmployeeRole() {
+module.exports = function updateEmployeeRole() {
   db.query("SELECT * FROM employees", function (err, employeesData) {
     const employees = employeesData.map((employees) => {
       return {
@@ -129,7 +193,7 @@ function updateEmployeeRole() {
 }
 
 // to delete employee
-function deleteEmployee() {
+module.exports = function deleteEmployee() {
   db.query("SELECT * from employees", function (err, employeesData) {
     const employees = employeesData.map((employees) => {
       return {
@@ -160,7 +224,7 @@ function deleteEmployee() {
 }
 
 // to add role
-function addRole() {
+module.exports = function addRole() {
   db.query("SELECT * FROM departments", function (err, departmentsData) {
     const departments = departmentsData.map((department) => {
       return {
@@ -207,7 +271,7 @@ function addRole() {
 }
 
 // view all roles
-function viewRoles() {
+module.exports = function viewRoles() {
   db.query(
     `SELECT roles.id, roles.title, salary, dept_name
     FROM roles LEFT JOIN departments ON roles.department_id = departments.id;`,
@@ -220,7 +284,7 @@ function viewRoles() {
 }
 
 // to add department
-function addDepartment() {
+module.exports = function addDepartment() {
   inquirer
     .prompt([
       {
@@ -243,22 +307,11 @@ function addDepartment() {
 }
 
 // to view all departments
-function viewAllDepartments() {
+module.exports = function viewAllDepartments() {
   db.query("SELECT * FROM departments", function (err, response) {
     if (err) throw err;
     printTable(response);
     startInquirer();
   });
 }
-
-module.exports = {
-  viewAllEmployees();
-
-  addEmployee(){},
-  updateEmployeeRole() {},
-  deleteEmployee() {},
-  addRole() {},
-  viewRoles() {},
-  addDepartment() {},
-  viewAllDepartments() {}
 
