@@ -187,7 +187,8 @@ function updateEmployeeRole() {
           value: roles.id,
         };
       });
-    });
+    
+
     inquirer
       .prompt([
         {
@@ -214,6 +215,7 @@ function updateEmployeeRole() {
           }
         );
       });
+    });
   });
 }
 
