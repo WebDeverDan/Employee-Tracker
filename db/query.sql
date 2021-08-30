@@ -25,7 +25,9 @@ SELECT roles.id, roles.title, salary, dept_name
 FROM roles LEFT JOIN departments ON roles.department_id = departments.id;
 
 
-
+SELECT employees.id, employees.first_name, employees.last_name, title, dept_name, salary
+FROM employees LEFT JOIN roles ON employees.roles_id = roles.id
+LEFT JOIN departments ON roles.department_id = departments.id
 
 
 
